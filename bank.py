@@ -1,16 +1,28 @@
 import cx_Oracle
 import logging
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
+host = os.getenv("DB_HOST", "localhost")
+port = os.getenv("DB_PORT", "1521")
+service = os.getenv("DB_SERVICE", "orcl")
+user = os.getenv("DB_USER", "system")
+password = os.getenv("DB_PASSWORD", "oracle")
+
+dsn = cx_Oracle.makedsn(host, port, service_name=service)
+
 logging.basicConfig(level=logging.INFO,format="%(asctime)s-%(levelname)s-%(message)s")
 class Bank:
     def __init__(self, name: str, age: int, branch: str, account_no: str, balance: float=0.0):# constructor
-        """ variable with private access modifier"""
+        """ variable with private access modifier """
         self.__name = name       
         self.__age = age        
         self.__branch = branch   
         self.__account_no = account_no       
         self.__balance = float(balance)  
     def getter(self)->dict:     
-        """it is a getter method where the all values return in the form of dictionary""" 
+        """it is a getter method where the all values return in the form of dictionary """ 
         return{
             "name":self.__name,
             "age":self.__age,
@@ -20,7 +32,7 @@ class Bank:
         }
     def deposit(self, amount: float)-> None:
         """Deposite amount"""
-        if amount > 0:   # when the client deposit amount more than 0
+        if amount > 0:   # when the client deposit amount more than 0 
             self.__balance += amount  # when the deposited here the balance will be updated
             logging.info(f"Deposited amount is :{amount} and now total balnace is:{self.__balance}" )
         else:
@@ -53,10 +65,9 @@ class Bank:
             balance= float(f.readline().strip()) 
             return Bank(name, age, branch, account_no, balance) # it is returning the object with the values
     def database(self)-> None:
-        """saving the data in oracle database"""
+        """saving the data in oracle database """
         try:
-            dsn = cx_Oracle.makedsn("localhost" ,1521 ,service_name = "orcl")
-            con = cx_Oracle.connect(user = "tharun",password = "tharun",dsn=dsn)
+            con = cx_Oracle.connect(user = user,password = password,dsn=dsn)
             c = con.cursor()
             c.execute(""" insert into bank_management(name,age,branch,account_no,balance) values(:1, :2, :3, :4, :5)""",(self.__name, self.__age,self.__branch, self.__account_no,self.__balance))
             con.commit()
@@ -69,8 +80,7 @@ class Bank:
     def fetch_details(account_no: str)-> "Bank | None":
         """fetches data from the oracle database"""
         try:
-            dsn=cx_Oracle.makedsn("localhost",1521,service_name="orcl")
-            con=cx_Oracle.connect(user="tharun",password="tharun",dsn=dsn)
+            con = cx_Oracle.connect(user = user,password = password,dsn=dsn)
             c=con.cursor()
             c.execute(""" select name, age, branch, account_no, balance from bank_management where account_no= :1 """,(account_no.strip(),))
             row=c.fetchone() #fetches the maching row
@@ -88,8 +98,7 @@ class Bank:
     def update_balance(self) -> None:
         """updating the balance in database"""
         try:
-            dsn=cx_Oracle.makedsn("localhost",1521,service_name="orcl")
-            con=cx_Oracle.connect(user="tharun",password="tharun",dsn=dsn)
+            con = cx_Oracle.connect(user = user,password = password,dsn=dsn)
             c=con.cursor()
             c.execute("""update bank_management set balance = :1 where account_no= :2""",(self.__balance,self.__account_no))
             con.commit()
