@@ -14,7 +14,11 @@ RUN apt-get update && apt-get install -y libaio1 unzip curl && \
 
 ENV LD_LIBRARY_PATH=/opt/oracle/instantclient_21_1
 ENV PATH=$PATH:/opt/oracle/instantclient_21_1
-
+ENV DB_HOST=192.168.29.104
+ENV DB_PORT=1521
+ENV DB_SERVICE=orcl
+ENV DB_USER=tharun
+ENV DB_PASSWORD=tharun
 COPY . .
 
 CMD ["python", "main.py"]
