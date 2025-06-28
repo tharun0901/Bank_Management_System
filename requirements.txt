@@ -1,2 +1,3 @@
 pytest
 cx_Oracle
+python-dotenv
