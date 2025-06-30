@@ -4,11 +4,11 @@ import os
 from dotenv import load_dotenv
 load_dotenv()
 
-host = os.getenv("DB_HOST", "localhost")
-port = os.getenv("DB_PORT", "1521")
-service = os.getenv("DB_SERVICE", "orcl")
-user = os.getenv("DB_USER", "system")
-password = os.getenv("DB_PASSWORD", "oracle")
+host = os.getenv("DB_HOST")
+port = os.getenv("DB_PORT")
+service = os.getenv("DB_SERVICE")
+user = os.getenv("DB_USER")
+password = os.getenv("DB_PASSWORD")
 
 dsn = cx_Oracle.makedsn(host, port, service_name=service)
 
