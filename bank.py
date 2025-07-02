@@ -69,6 +69,11 @@ class Bank:
         try:
             con = cx_Oracle.connect(user = user,password = password,dsn=dsn)
             c = con.cursor()
+            c.execute(""" select table_name from user_tables where table_name = 'BANK_MANAGEMENT'""")
+            result=c.fetchone()
+            if not result:
+                c.execute(""" create table Bank_Management(name VARCHAR2(50), age NUMBER,branch VARCHAR2(50),account_no VARCHAR2(20) PRIMARY KEY,balance NUMBER)""")
+                logging.info("tABLE Created")
             c.execute(""" insert into bank_management(name,age,branch,account_no,balance) values(:1, :2, :3, :4, :5)""",(self.__name, self.__age,self.__branch, self.__account_no,self.__balance))
             con.commit()
             c.close()
