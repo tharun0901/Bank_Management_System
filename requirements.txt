@@ -1,4 +1,5 @@
 pytest
 cx_Oracle
 python-dotenv
-flask
+fastapi
+uvicorn
