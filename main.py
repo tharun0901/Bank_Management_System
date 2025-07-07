@@ -1,60 +1,55 @@
 from bank import Bank
+from pydantic import BaseModel
+from fastapi import FastAPI,HTTPException
 import logging
-logging.basicConfig(level=logging.INFO,format="%(asctime)s-%(levelname)s-%(message)s")
-class BankManagement:
-    @staticmethod
-    def main()->None:
-     account = None
-     while True:
-        print("1. Create account")
-        print("2. Account details")
-        print("3. Deposit")
-        print("4. Withdraw")
-        print("5. cancel")
-        opt = input("select options from the above:").strip()
-        if opt == "1":
-           name = input("Enter your name:")
-           age = input("Enter your age:")
-           branch = input("Enter the branch:")
-           account_no = input("Enter the accunt number").strip()
-           account = Bank(name,age,branch,account_no)
-           account.file_write()
-           account.database()
-           logging.info("Account created successfully")
-        elif opt == "2":
-           acc_no=input("Enter your account number:").strip()
-           account=Bank.fetch_details(acc_no)
-           if account:
-              detail = account.getter()
-              for k,v in detail.items():
-                 print(f"{k}:{v}")
-           else:
-              logging.warning("no account details")
-        elif opt == "3":
-            acc_no=input("Enter your account number:").strip()
-            account=Bank.fetch_details(acc_no)
-            if account:
-               amount = float(input("Enter amount you want to deposit: "))
-               account.deposit(amount)
-               account.file_write()
-               account.update_balance()
-            else:
-               logging.warning("no account")
 
-        elif opt == "4":
-            acc_no=input("Enter your account number:").strip()
-            account=Bank.fetch_details(acc_no)
-            if account:
-                amount = float(input("Enter amount you want to withdraw: "))
-                account.withdraw(amount)
-                account.file_write()
-                account.update_balance()
-            else:
-               logging.warning("no account")
-        elif opt == "5":
-           print("exit")
-           break
-        else:
-           logging.error("Invalid input")
+app=FastAPI(title="Bank Management System API")
+class createAccount(BaseModel):
+   name:str
+   age: int
+   branch:str
+   account_no:str
+   balance:float=0.0
+class Transaction(BaseModel):
+   account_no:str
+   amount:float
 
-BankManagement.main()
+@app.post("/create_account")
+def create_account(d:createAccount):
+   try: 
+      account=Bank(d.name, d.age ,d. branch, d.account_no, d.balance)
+      account.file_write()
+      account.database()
+      return {"message":"Account creataed successfully "}
+   except Exception as e:
+      raise HTTPException(status_code=404,detail=str(e))
+@app.get("/account/{account_no}")
+def get_account(account_no:str):
+   account=Bank.fetch_details(account_no)
+   if account:
+      return account.getter()
+   raise HTTPException(status_code=404,detail="sorry, account not found")
+@app.post("/deposit")
+def deposit(d:Transaction):
+   account=Bank.fetch_details(d.account_no)
+   if not account:
+     raise HTTPException(status_code=404,detail="aCCOUNT not found")
+   account.deposit(d.amount)
+   account.update_balance()
+   account.file_write()
+   return {
+      "message":"Deposited",
+      "new_balance":account.getter()["balance"]
+   }
+@app.post("/withdraw")
+def withdraw(d: Transaction):
+   account=Bank.fetch_details(d.account_no)
+   if not account:
+      raise HTTPException(status_code=404,detail="Account not found")
+   account.withdraw(d.amount)
+   account.update_balance()
+   account.file_write()
+   return {
+      "message":"withdraw successfull",
+      "new_balance":account.getter()["balance"]
+   }
