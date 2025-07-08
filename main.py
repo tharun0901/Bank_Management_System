@@ -20,7 +20,7 @@ def create_account(d:createAccount):
       account=Bank(d.name, d.age ,d. branch, d.account_no, d.balance)
       account.file_write()
       account.database()
-      return {"message":"Account creataed successfully "}
+      return {"message":"Account created successfully"}
    except Exception as e:
       raise HTTPException(status_code=404,detail=str(e))
 @app.get("/account/{account_no}")
