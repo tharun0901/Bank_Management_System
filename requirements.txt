@@ -3,3 +3,4 @@ cx_Oracle
 python-dotenv
 fastapi
 uvicorn
+httpx
