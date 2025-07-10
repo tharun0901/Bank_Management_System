@@ -29,7 +29,7 @@ jobs:
       - name: Install Oracle Instant Client 19.8
         run: |
           sudo apt-get update
-          sudo apt-get install -y libaio1 unzip wget
+          sudo apt-get install -y libaio-dev unzip wget
           wget https://download.oracle.com/otn_software/linux/instantclient/19800/instantclient-basiclite-linux.x64-19.8.0.0.0dbru.zip
           unzip instantclient-basiclite-linux.x64-19.8.0.0.0dbru.zip -d oracle_client
           echo "$HOME/oracle_client/instantclient_19_8" >> $GITHUB_PATH
