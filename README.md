@@ -30,3 +30,10 @@ It also comes with **automated testing** and runs **unit test**" every time you 
   ```bash
   git clone https://github.com/tharun0901/Bank_Management_System
   cd Bank_Management_System_Project
+2. **Make sure Docker is running**  
+   Ensure that **Docker Desktop** is installed and running in the background before continuing.
+
+3. **Build and Start the Containers**  
+   This command will build and start the FastAPI app and Oracle DB using Docker Compose:
+   ```bash
+   docker-compose up --build -d
