@@ -25,19 +25,22 @@ It also comes with **automated testing** and runs **unit test**" every time you 
 -**GitHub Actions**- for automated testing on push
 
 ## How to run
-```bash
 1.Clone the Repository
   command:
-    git clone https://github.com/tharun0901/Bank_Management_System
-    cd Bank_Management_System_Project
+  ```bash
+  git clone https://github.com/tharun0901/Bank_Management_System
+  cd Bank_Management_System_Project
 2.Make sure Docker open
 3.Build and Start the Containers
  Command:
+ ```bash
  docker-compose up --build -d
 4.Open the FastApI Docs
   After the container Start,visit:
+  ```bash
   http://localhost:8000/docs
 5.Run Test cases
+  ```bash
   docker exec -it bank-app pytest test_api.py
 
 
