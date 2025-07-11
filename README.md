@@ -26,26 +26,27 @@ It also comes with **automated testing** and runs **unit test**" every time you 
 
 ## How to run
 ### 1.Clone the Repository
-  command:
-  ```bash
-  git clone https://github.com/tharun0901/Bank_Management_System
-  cd Bank_Management_System_Project
-  ``` 
+command:
+```bash
+git clone https://github.com/tharun0901/Bank_Management_System
+cd Bank_Management_System_Project
+``` 
 ### 2.Make sure Docker open
+If not installed please install
 ### 3.Build and Start the Containers
-    Command:
-   ```bash
-     docker-compose up --build -d
+Command:
+```bash
+docker-compose up --build -d
 ``` 
 ### 4.Open the FastApI Docs
-     After the container Start,visit:
-    ```bash
-     http://localhost:8000/docs
-  ``` 
+After the container Start,visit:
+```bash
+http://localhost:8000/docs
+``` 
 ### 5.Run Test cases
-   ```bash
-    docker exec -it bank-app pytest test_api.py
-   ``` 
+```bash
+docker exec -it bank-app pytest test_api.py
+``` 
 
 
 
