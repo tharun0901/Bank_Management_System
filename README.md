@@ -26,6 +26,7 @@ It also comes with **automated testing** and runs **unit test**" every time you 
 
 ## How to run
 1.Clone the Repository
+  ```bash
  command:git clone https://github.com/tharun0901/Bank_Management_System
  cd Bank_Management_System_Project
 2.Make sure Docker open
