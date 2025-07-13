@@ -10,7 +10,7 @@ def test_create_account(mock_connect):
     mock_conn=MagicMock()
     mock_cursor=MagicMock()
     mock_cursor.fetchone.side_effect=[None]
-    mock_conn.return_value=mock_cursor
+    mock_conn.cursor.return_value=mock_cursor
     mock_connect.return_value=mock_conn
     res=test.post("/create_account",json={
         "name":"tharun",

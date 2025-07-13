@@ -27,6 +27,18 @@ services:
     tty: true
     volumes:
       - .:/app   
+  frontend:
+    build:
+      context: ./frontend
+    container_name: bank-frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+    stdin_open: true
+    tty: true
+    depends_on:
+      - bank-app
 
 volumes:
   oracle_data:

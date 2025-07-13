@@ -1,9 +1,18 @@
+from fastapi.middleware.cors import CORSMiddleware
 from bank import Bank
 from pydantic import BaseModel
 from fastapi import FastAPI,HTTPException
 import logging
 
 app=FastAPI(title="Bank Management System API")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"],  # React app origin
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 class createAccount(BaseModel):
    name:str
    age: int
@@ -38,6 +47,8 @@ def deposit(d:Transaction):
    account.update_balance()
    account.file_write()
    return {
+      "account_no":account.getter()["account_no"],
+      "amount":d.amount,
       "message":"Deposited",
       "new_balance":account.getter()["balance"]
    }
@@ -50,6 +61,8 @@ def withdraw(d: Transaction):
    account.update_balance()
    account.file_write()
    return {
+      "account_no":account.getter()["account_no"],
+      "amount":d.amount,
       "message":"withdraw successfull",
       "new_balance":account.getter()["balance"]
    }
