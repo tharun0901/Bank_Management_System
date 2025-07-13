@@ -40,6 +40,9 @@ def get_account(account_no:str):
    raise HTTPException(status_code=404,detail="sorry, account not found")
 @app.post("/deposit")
 def deposit(d:Transaction):
+   if d.amount <= 0:
+      raise HTTPException(status_code=400, detail="Invalid deposit amount")
+    
    account=Bank.fetch_details(d.account_no)
    if not account:
      raise HTTPException(status_code=404,detail="aCCOUNT not found")
@@ -54,9 +57,13 @@ def deposit(d:Transaction):
    }
 @app.post("/withdraw")
 def withdraw(d: Transaction):
+   if d.amount <= 0:
+      raise HTTPException(status_code=400, detail="Invalid withdrawal amount")
    account=Bank.fetch_details(d.account_no)
    if not account:
       raise HTTPException(status_code=404,detail="Account not found")
+   if d.amount > account.getter()["balance"]:
+      raise HTTPException(status_code=400, detail="Insufficient balance for withdrawal.")
    account.withdraw(d.amount)
    account.update_balance()
    account.file_write()
