@@ -36,7 +36,7 @@ const AccountDetails= () => {
           <p>Name: {account.name}</p>
           <p>Age: {account.age}</p>
           <p>Branch: {account.branch}</p>
-          <p>Balance: ₹{account.balance}</p>
+          <p>Balance: {account.balance}</p>
         </div>
       )}
     </form>
