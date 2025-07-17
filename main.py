@@ -1,17 +1,22 @@
 from fastapi.middleware.cors import CORSMiddleware
 from bank import Bank
 from pydantic import BaseModel
-from fastapi import FastAPI,HTTPException
+from fastapi import FastAPI,HTTPException,UploadFile,File
 import logging
+import base64
+import uuid
+import os
 
 app=FastAPI(title="Bank Management System API")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"],  # React app origin
+    allow_origins=["http://localhost:3000"], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+class ImageData(BaseModel):
+   image:str
 
 class createAccount(BaseModel):
    name:str
@@ -73,3 +78,14 @@ def withdraw(d: Transaction):
       "message":"withdraw successfull",
       "new_balance":account.getter()["balance"]
    }
+@app.post("/upload-video")
+async def upload_video(file:UploadFile=File(...)):
+   try:
+      os.makedirs("videos",exist_ok=True)
+      filename = f"recording_{uuid.uuid4().hex[:8]}.webm"
+      save_path=os.path.join("videos",filename)
+      with open(save_path,"wb") as f:
+         f.write(await file.read())
+         return {"message":"uploaded successfully","filename":filename}
+   except Exception as e:
+      raise HTTPException(status_code=500,detail=str(e))
