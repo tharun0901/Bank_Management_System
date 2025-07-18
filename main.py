@@ -79,13 +79,13 @@ def withdraw(d: Transaction):
       "new_balance":account.getter()["balance"]
    }
 @app.post("/upload-video")
-async def upload_video(file:UploadFile=File(...)):
+async def upload_video(video:UploadFile=File(...)):
    try:
       os.makedirs("videos",exist_ok=True)
       filename = f"recording_{uuid.uuid4().hex[:8]}.webm"
       save_path=os.path.join("videos",filename)
       with open(save_path,"wb") as f:
-         f.write(await file.read())
+         f.write(await video.read())
          return {"message":"uploaded successfully","filename":filename}
    except Exception as e:
       raise HTTPException(status_code=500,detail=str(e))
