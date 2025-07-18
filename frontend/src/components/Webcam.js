@@ -55,7 +55,7 @@ const WebcamFeed=()=>{
 
         };
     const stopRecording=()=>{
-            if (recordRef.current && recordRef.current.start !== "inactive") {
+            if (recordRef.current && recordRef.current.state !== "inactive") {
                 recordRef.current.stop();
             }
         }
@@ -81,6 +81,6 @@ const WebcamFeed=()=>{
                     </div>
             )}
         </div>    
-    );
+    );  
 };
 export default WebcamFeed;
